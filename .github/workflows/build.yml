@@ -37,5 +37,5 @@ jobs:
           rm -rf flatcar_developer_container.bin flatcar_developer_container.bin.bz2
 
           echo "=========================== Push Image ==========================="
-          docker login -u="analogj" -p="${{ secrets.DH_PASSWORD }}"
+          echo "${{ secrets.DH_PASSWORD }}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
           docker push ${DOCKER_HUB_USERNAME}/${DOCKER_HUB_REPO}:${FLATCAR_VERSION}
