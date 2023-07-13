@@ -1,0 +1,27 @@
+name: Docker Image CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  image:
+    name: Image
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        flatcar_track: ['stable']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Test
+        run: |
+          echo "=========================== Check ==========================="
+          curl https://${{matrix.flatcar_track}}.release.flatcar-linux.net/amd64-usr/current/version.txt -o version.txt
+          cat version.txt
+          export $(cat version.txt | xargs)
+
+	  git clone https://github.com/flatcar/scripts.git
+          cd scripts
+          git checkout beta-3602.1.2
+          ./run_sdk_container 
